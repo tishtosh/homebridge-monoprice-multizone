@@ -1,2 +1,6 @@
 # homebridge-monoprice-multizone
-Control Monoprice multizone amp via http bridge to RS232 adapter 
+Homebridge plugin to control monoprice 6-zone multizone amp.
+
+Relies on HTTP to RS232 bridge which is an ESP8266 running ESPLINK https://github.com/jeelabs/esp-link
+
+This plugin originally based on HTTP bridge
