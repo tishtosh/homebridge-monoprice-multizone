@@ -1,0 +1,47 @@
+{
+    "bridge": {
+        "name": "Hayman Home",
+        "username": "CC:22:3D:33:EC:03",
+        "port": 51826,
+        "pin": "031-45-154"
+    },
+
+    "description": "Configuration file for Hayman house in Vermont",
+
+    "platforms": [
+            {
+                "platform": "HttpWebHooks",
+                "webhook_port": "51828",
+
+                "device_server":
+                    {
+                    "url": "http://192.168.1.30/console/send?text=",
+                    "off": "%3c1<ZONE>PR00%0d",
+                    "on": "%3c1<ZONE>PR01%0d",
+                    "volume": "%3c1<ZONE>VO<VOL>%0d"
+                    }
+                ,
+
+                "cache_directory": "./.node-persist/storage",
+                "volumes": [
+                    { "id": "Zone0","name": "House Volume",   "zone": "0", "cmd": "%3c10VO<VAL>%0d" },
+                    { "id": "Zone1","name": "Kitchen Volume", "zone": "1", "cmd": "%3c11VO<VAL>%0d" },
+                    { "id": "Zone2","name": "Loft Volume",    "zone": "2", "cmd": "%3c12VO<VAL>%0d" },
+                    { "id": "Zone3","name": "Dining Volume",  "zone": "3", "cmd": "%3c13VO<VAL>%0d" },
+                    { "id": "Zone4","name": "Bedroom Volume",  "zone": "4", "cmd": "%3c14VO<VAL>%0d" },
+                    { "id": "Zone5","name": "Family Volume",  "zone": "5", "cmd": "%3c15VO<VAL>%0d" },
+                    { "id": "Zone6","name": "Deck Volume",  "zone": "6", "cmd": "%3c16VO<VAL>%0d" }
+                ],
+
+                "switches": [
+                    {
+                    "id": "Zone1a",
+                    "name": "Test",
+                    "on_url": "http://192.168.1.30/console/send?text=%3c11PR01%0d",
+                    "off_url": "http://192.168.1.30/console/send?text=%3c11PR00%0d"
+                    }
+                ]
+            }
+    ]
+
+}
