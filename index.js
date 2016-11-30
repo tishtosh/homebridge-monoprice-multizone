@@ -9,8 +9,8 @@ module.exports = function(homebridge) {
     Characteristic = homebridge.hap.Characteristic;
 
     homebridge.registerPlatform("homebridge-monoprice-multizone", "HttpMultizone", HttpMultizonePlatform);
-    homebridge.registerAccessory("homebridge-monoprice-multizone", "HttpMultizoneensor", HttpMultizoneensorAccessory);
-    homebridge.registerAccessory("homebridge-monoprice-multizone", "HttpMultizonewitch", HttpMultizonewitchAccessory);
+    homebridge.registerAccessory("homebridge-monoprice-multizone", "HttpMultizoneSensor", HttpMultizoneSensorAccessory);
+    homebridge.registerAccessory("homebridge-monoprice-multizone", "HttpMultizoneSwitch", HttpMultizoneSwitchAccessory);
 };
 
 function HttpMultizonePlatform(log, config){
@@ -28,12 +28,12 @@ HttpMultizonePlatform.prototype = {
     accessories: function(callback) {
         var accessories = [];
         for(var i = 0; i < this.sensors.length; i++){
-            var sensor = new HttpMultizoneensorAccessory(this.log, this.sensors[i], this.storage);
+            var sensor = new HttpMultizoneSensorAccessory(this.log, this.sensors[i], this.storage);
             accessories.push(sensor);
         }
 
         for(var i = 0; i < this.switches.length; i++){
-            var switchAccessory = new HttpMultizonewitchAccessory(this.log, this.switches[i], this.storage);
+            var switchAccessory = new HttpMultizoneSwitchAccessory(this.log, this.switches[i], this.storage);
             accessories.push(switchAccessory);
         }
         var accessoriesCount = accessories.length;
@@ -104,7 +104,7 @@ HttpMultizonePlatform.prototype = {
     }
 }
 
-function HttpMultizoneensorAccessory(log, sensorConfig, storage) {
+function HttpMultizoneSensorAccessory(log, sensorConfig, storage) {
     this.log = log;
     this.id = sensorConfig["id"];
     this.name = sensorConfig["name"];
@@ -154,7 +154,7 @@ function HttpMultizoneensorAccessory(log, sensorConfig, storage) {
     }
 }
 
-HttpMultizoneensorAccessory.prototype.getState = function(callback) {
+HttpMultizoneSensorAccessory.prototype.getState = function(callback) {
     this.log("Getting current state for '%s'...", this.id);
     var state = this.storage.getItemSync("http-webhook-"+this.id);
     if(state === undefined) {
@@ -171,11 +171,11 @@ HttpMultizoneensorAccessory.prototype.getState = function(callback) {
     }
 };
 
-HttpMultizoneensorAccessory.prototype.getServices = function() {
+HttpMultizoneSensorAccessory.prototype.getServices = function() {
   return [this.service];
 };
 
-function HttpMultizonewitchAccessory(log, switchConfig, storage) {
+function HttpMultizoneSwitchAccessory(log, switchConfig, storage) {
     this.log = log;
     this.id = switchConfig["id"];
     this.name = switchConfig["name"];
@@ -195,7 +195,7 @@ function HttpMultizonewitchAccessory(log, switchConfig, storage) {
         .on('set', this.setState.bind(this));
 }
 
-HttpMultizonewitchAccessory.prototype.getState = function(callback) {
+HttpMultizoneSwitchAccessory.prototype.getState = function(callback) {
     this.log("Getting current state for '%s'...", this.id);
     var state = this.storage.getItemSync("http-webhook-"+this.id);
     if(state === undefined) {
@@ -204,7 +204,7 @@ HttpMultizonewitchAccessory.prototype.getState = function(callback) {
     callback(null, state);
 };
 
-HttpMultizonewitchAccessory.prototype.setState = function(powerOn, callback) {
+HttpMultizoneSwitchAccessory.prototype.setState = function(powerOn, callback) {
     this.log("Switch state for '%s'...", this.id);
     this.storage.setItemSync("http-webhook-"+this.id, powerOn);
     var urlToCall = this.onURL;
@@ -228,6 +228,6 @@ HttpMultizonewitchAccessory.prototype.setState = function(powerOn, callback) {
     }
 };
 
-HttpMultizonewitchAccessory.prototype.getServices = function() {
+HttpMultizoneSwitchAccessory.prototype.getServices = function() {
   return [this.service];
 };
